@@ -1,0 +1,32 @@
+# See https://www.chirpstack.io/gateway-bridge/install/config/ for a full
+# configuration example and documentation.
+
+#[integration.mqtt.auth.generic]
+#servers=["tcp://mosquitto:1883"]
+#username=""
+#password=""
+
+[general]
+log_level = 4
+
+[backend]
+type="semtech_udp"
+
+  [backend.semtech_udp]
+  udp_bind = "0.0.0.0:1701"
+
+[integration]
+marshaler="protobuf"
+
+  [integration.mqtt]
+  event_topic_template="gateway/{{ .GatewayID }}/event/{{ .EventType }}"
+  command_topic_template="gateway/{{ .GatewayID }}/command/#"
+
+  [integration.mqtt.auth]
+  type="generic"
+
+    [integration.mqtt.auth.generic]
+    servers=["ssl://eu868.mqtt.loracloud.com:8883"]
+    ca_cert="/etc/chirpstack-gateway-bridge/ca.pem"
+    tls_cert="/etc/chirpstack-gateway-bridge/cert.pem"
+    tls_key="/etc/chirpstack-gateway-bridge/key.pem"
